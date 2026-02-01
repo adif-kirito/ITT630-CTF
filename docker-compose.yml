@@ -1,0 +1,25 @@
+services:
+  web:
+    image: php:8.2-apache
+    container_name: bruteforce-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:11
+    container_name: bruteforce-db
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpass123
+      MARIADB_DATABASE: labdb
+      MARIADB_USER: labuser
+      MARIADB_PASSWORD: labpass123
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./web/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+volumes:
+  dbdata:
